@@ -27,7 +27,7 @@ def sanity_check(val):
     if len(val) > MAX_INPUT_LENGTH:
         raise SanityException("%d is a stupid length for an input" % len(val))
 
-    valid_chars="+-.1234567890"
+    valid_chars="+-.1234567890:- "
     for c in val:
         if c not in valid_chars:
             raise SanityException("%s is not a valid character for a lat/long/alt" % c)
@@ -46,11 +46,11 @@ def refuse(reason):
     </body>
     """ % reason
 
-def store_and_return(lat, long, alt):
+def store_and_return(lat, long, alt, post_time):
 
     #Store the data, one datum per line, overwriting the previous data
     location_file=open(LOCATION_FILENAME, "w")
-    location_file.write("%s\n%s\n%s\n" % (lat, long, alt))
+    location_file.write("%s\n%s\n%s\n%s\n" % (lat, long, alt, post_time))
     location_file.close()
 
     #return 200, and a form for updating the data.
@@ -63,28 +63,32 @@ def store_and_return(lat, long, alt):
     long=%s
     <br />
     alt=%s
+    <br />
+    time=%s
     <div class="reload-form">
         <form method="POST" target="update_location.py">
         <table>
         <tr> <td>Latitude:</td> <td><input type="text" name="latitude" /></td> </tr>
         <tr> <td>Longitude:</td> <td><input type="text" name="longitude" /></td> </tr>
         <tr> <td>Altitude:</td> <td><input type="text" name="altitude" /></td> </tr>
+        <tr> <td>Time:</td> <td><input type="text" name="time" /></td> </tr>
         <tr><td><input type="submit"></td></tr>
         </table>
         </form>
     </div>
     </body>
-""" % (lat, long, alt)
+""" % (lat, long, alt, post_time)
 
 #Grab the location data
 data=cgi.FieldStorage()
 lat=get_val(data, "latitude")
 long=get_val(data, "longitude")
 alt=get_val(data, "altitude")
+post_time=get_val(data, "time")
 
 #Do a basic sanity check on the data, proceed only if we think it's safe
 try:
-    map(sanity_check, [lat, long, alt])
-    store_and_return(lat, long, alt)
+    map(sanity_check, [lat, long, alt, post_time])
+    store_and_return(lat, long, alt, post_time)
 except SanityException as insanity:
     refuse(insanity)

@@ -23,11 +23,13 @@ public class PublishTask extends AsyncTask<String, String, String> {
 		String latitude = data[0];
 		String longitude = data[1];
 		String altitude = data[2];
+		String currentTime = data[3];
 
-		List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+		List<NameValuePair> params = new ArrayList<NameValuePair>(4);
 		params.add(new BasicNameValuePair("latitude", latitude));
 		params.add(new BasicNameValuePair("longitude", longitude));
 		params.add(new BasicNameValuePair("altitude", altitude));
+		params.add(new BasicNameValuePair("time", currentTime));
 		
 		HttpClient httpClient= new DefaultHttpClient();
 		HttpPost httpPost = new HttpPost("http://burblechaz.com/chaz_locator/update_location.py");

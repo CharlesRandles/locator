@@ -56,8 +56,9 @@ public class MainActivity extends Activity {
     			public void onLocationChanged(Location location) {
     	    			Time now = new Time();
     	    			now.setToNow();
+    	    			String currentTime = now.format("%H:%M:%S %e-%m-%G");
     	    			TextView status = (TextView) findViewById(R.id.location_status);
-    	    			String status_string = now.format("%H:%M:%S %e-%m-%G");
+    	    			String status_string = currentTime;
     	    			double latitude = location.getLatitude();
     	    			double longitude = location.getLongitude();
     	    			double altitude = location.getAltitude();
@@ -66,7 +67,7 @@ public class MainActivity extends Activity {
     	    			status_string = status_string + String.format("\nAlt:%1.3f", altitude);
     	    			status.setText(status_string);
     	    			
-    	    			publishLocation(latitude, longitude, altitude);
+    	    			publishLocation(latitude, longitude, altitude, currentTime);
     	    			
     			}
 
@@ -89,19 +90,19 @@ public class MainActivity extends Activity {
 			}
     		};
     		//Go and find us 
-    		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000 * 60 , 0, locationListener);
+    		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000 * 60 *5 , 0, locationListener);
     		
     }
 
     /*
      * Do an HTTP Post of the data
      */
-	protected void publishLocation(double latitude, double longitude,double altitude) {
+	protected void publishLocation(double latitude, double longitude,double altitude, String currentTime) {
 
 		String s_lat = String.format("%1.3f", latitude);
 		String s_long = String.format("%1.3f", longitude);
 		String s_alt = String.format("%1.3f", altitude);
-		new PublishTask().execute(s_lat, s_long, s_alt);
+		new PublishTask().execute(s_lat, s_long, s_alt, currentTime);
 		
 	}
 }

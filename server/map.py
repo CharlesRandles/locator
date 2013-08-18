@@ -31,7 +31,7 @@ def google_map(lat, long):
         var latLng = new google.maps.LatLng(""" + lat + "," + long + """);
         var mapOptions = {
           center: latLng,
-          zoom: 12,
+          zoom: 15,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("map-canvas"),
@@ -54,16 +54,17 @@ def html_header():
     </head>
     """ % google_map(lat, long)
 
-def html_pos_text(lat, long, alt):
+def html_pos_text(lat, long, alt, time):
     return """
     <div class="table">
     <table>
     <tr><td>Lat:</td><td>%s</td></tr>
     <tr><td>Long:</td><td>%s</td></tr>
     <tr><td>Alt:</td><td>%s</td></tr>
+    <tr><td>Time:</td><td>%s</td></tr>
     </table>
     </div>
-    """ % (lat, long, alt)
+    """ % (lat, long, alt, time)
 
 def map_div():
     return """
@@ -76,20 +77,21 @@ def write_page(lat, long, alt):
     print "<html>"
     print html_header()
     print"<body>"
-    print html_pos_text(lat, long, alt)
+    print html_pos_text(lat, long, alt, time)
     print map_div()
     print"</body>"
     print "</html>"
 
 #Read the location
 try:
-    (lat, long, alt) = open(LOCATION_FILENAME).readlines()
+    (lat, long, alt, time) = open(LOCATION_FILENAME).readlines()
 except ValueError as e:
-    (lat, long, alt) = (0.0, 0.0, 0.0)
+    (lat, long, alt, time) = ("0.0", "0.0", "0.0", "Unknown")
 
 lat=lat.strip()
 long=long.strip()
 alt=alt.strip()
+time=time.strip()
 
 write_page(lat, long, alt)
 
