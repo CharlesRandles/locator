@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Chaz Locator</string>
+    <string name="action_settings">Settings</string>
+    <string name="no_location">No Location</string>
+    <string name="button_locate">Start</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_display_message">Message to Chaz</string>
+
+</resources>
